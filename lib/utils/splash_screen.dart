@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
@@ -14,13 +15,13 @@ class _SplashScreenState extends State<SplashScreen> {
     _checkCurrentUser();
   }
 
-  void _checkCurrentUser() async {
-    await Future.delayed(const Duration(seconds: 1));
+  void _checkCurrentUser() async{
+   await Future.delayed(const Duration(seconds: 1));
     if (FirebaseAuth.instance.currentUser != null) {
       Navigator.pushReplacementNamed(context, '/homeScreen');
-      
-    }else
-    Navigator.pushReplacementNamed(context, '/loginScreen');
+    } else {
+      Navigator.pushReplacementNamed(context, '/loginScreen');
+    }
   }
 
   @override

@@ -7,10 +7,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:simple_markdown_editor/widgets/markdown_form_field.dart';
+
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class BlogUploadScreen extends StatefulWidget {
   const BlogUploadScreen({super.key});
@@ -33,10 +36,17 @@ class _BlogUploadScreenState extends State<BlogUploadScreen> {
   // Define a method to pick an image from the gallery
   Future<void> _pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    imageSize = await pickedFile!.length();
+
+    //compressing till below 100kb
+    while ((imageSize / 1024) > 100) {
+      _compressImage();
+    }
     if (pickedFile != null) {
       setState(() {
         _imageFile = File(pickedFile.path);
       });
+      _cropImage();
     }
   }
 
@@ -91,6 +101,71 @@ class _BlogUploadScreenState extends State<BlogUploadScreen> {
     }
   }
 
+  // compressiong logic
+  bool _isCompressing = false;
+  Future<void> _compressImage() async {
+    setState(() {
+      _isCompressing = true;
+    });
+
+    final originalImageBytes = await _imageFile!.readAsBytes();
+    final compressedImageBytes = await FlutterImageCompress.compressWithList(
+      originalImageBytes,
+      quality: 90,
+    );
+
+    final compressedImageFile =
+        await _imageFile!.writeAsBytes(compressedImageBytes);
+
+    imageSize = await compressedImageFile.length();
+    setState(() {
+      _imageFile = compressedImageFile;
+      _isCompressing = false;
+    });
+  }
+
+  int imageSize = 0;
+
+  Future<void> _cropImage() async {
+    if (_imageFile != null) {
+      final croppedFile = await ImageCropper().cropImage(
+        sourcePath: _imageFile!.path,
+        compressFormat: ImageCompressFormat.jpg,
+        compressQuality: 100,
+        aspectRatio: CropAspectRatio(ratioX: 16, ratioY: 9),
+        uiSettings: [
+          AndroidUiSettings(
+              toolbarTitle: 'Cropper',
+              toolbarColor: Colors.deepOrange,
+              toolbarWidgetColor: Colors.white,
+              initAspectRatio: CropAspectRatioPreset.original,
+              lockAspectRatio: false),
+          IOSUiSettings(
+            title: 'Cropper',
+          ),
+          WebUiSettings(
+            context: context,
+            // presentStyle: CropperPresentStyle.dialog,
+            // boundary: const CroppieBoundary(
+            //   width: 520,
+            //   height: 520,
+            // ),
+            // viewPort:
+            //     const CroppieViewPort(width: 480, height: 480, type: 'circle'),
+            // enableExif: true,
+            // enableZoom: true,
+            // showZoomer: true,
+          ),
+        ],
+      );
+      if (croppedFile != null) {
+        setState(() {
+          _imageFile = File(croppedFile.path);
+        });
+      }
+    }
+  }
+
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -108,18 +183,38 @@ class _BlogUploadScreenState extends State<BlogUploadScreen> {
                     children: [
                       GestureDetector(
                         onTap: _pickImage,
-                        child: Container(
-                          width: 300.0,
-                          height: 150.0,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius: BorderRadius.circular(10.0),
+                        child: AspectRatio(
+                          aspectRatio: 71 / 40,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.grey,
+                                  blurRadius: 5.0,
+                                ),
+                              ],
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: _imageFile != null
+                                ? Image.file(
+                                    _imageFile!,
+                                    fit: BoxFit.cover,
+                                  )
+                                : const Icon(Icons.add_a_photo, size: 50.0),
                           ),
-                          child: _imageFile != null
-                              ? Image.file(_imageFile!, fit: BoxFit.cover)
-                              : Icon(Icons.add_a_photo, size: 50.0),
                         ),
                       ),
+                      const SizedBox(height: 16),
+                      // ElevatedButton(
+                      //   onPressed: _isCompressing ? null : _compressImage,
+                      //   child: _isCompressing
+                      //       ? const CircularProgressIndicator()
+                      //       : Text('Compress Image ${(imageSize / 1024)}kB'),
+                      // ),
+                      ElevatedButton(
+                          onPressed: () {},
+                          child: Text('compressed Image size : ${(imageSize / 1024).toStringAsPrecision(3)}kB')),
                       TextFormField(
                         controller: _titleController,
                         decoration: const InputDecoration(
@@ -168,7 +263,7 @@ class _BlogUploadScreenState extends State<BlogUploadScreen> {
                         ),
                       ),
                       Container(
-                        width: double.maxFinite,
+                          width: double.maxFinite,
                           padding: const EdgeInsets.symmetric(vertical: 16.0),
                           child: ElevatedButton(
                               onPressed: () {

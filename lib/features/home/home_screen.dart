@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../providers/app_providers.dart';
+import 'my_drawer.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -9,6 +10,7 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
+      drawer: MyDrawer(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.pushNamed(context, '/blogUploadScreen');
@@ -16,15 +18,17 @@ class HomeScreen extends ConsumerWidget {
         child: const Icon(Icons.add),
       ),
       appBar: AppBar(actions: [
-        ElevatedButton(
-          child: const Text('Click me!'),
-          onPressed: () {
-            ref.read(themeMode.notifier).state =
-                ref.read(themeMode) == ThemeMode.light
-                    ? ThemeMode.dark
-                    : ThemeMode.light;
-          },
-        )
+        Consumer(builder: (context, ref, child) {
+          final theme = ref.watch(themeModeProvider);
+          return IconButton(
+              onPressed: () {
+                ref.read(themeModeProvider.notifier).state =
+                    theme == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+              },
+              icon: Icon(theme == ThemeMode.dark
+                  ? Icons.light_mode
+                  : Icons.dark_mode));
+        })
       ]),
     );
   }

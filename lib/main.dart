@@ -23,14 +23,18 @@ class MyApp extends ConsumerWidget {
 
   // final GoogleSignIn _googleSignIn = GoogleSignIn();
   @override
-  Widget build(BuildContext context ,WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    
+    final themMode = ref.watch(themeModeProvider);
     return MaterialApp(
-      themeMode: ref.watch(themeMode),
-      theme: ThemeData(useMaterial3: true),
+      theme: ThemeData(useMaterial3: true, colorScheme: const ColorScheme.light()),
+      darkTheme: ThemeData(useMaterial3: true, colorScheme: const ColorScheme.dark()),
+      themeMode: themMode, // Apply them theme
+
       initialRoute: '/',
       // initialRoute: _googleSignIn.currentUser == null ? '/' : '/homeScreen',
       routes: {
-        '/': (context) => SplashScreen(),
+        '/': (context) => const SplashScreen(),
         '/loginScreen': (context) => LoginScreen(),
         '/homeScreen': (context) => const HomeScreen(),
         '/blogUploadScreen': (context) => const BlogUploadScreen(),
