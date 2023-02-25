@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "1059746460228",
+    "project_id": "guideme-through",
+    "storage_bucket": "guideme-through.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1059746460228:android:ae065357df3a3a43c58211",
+        "android_client_info": {
+          "package_name": "com.pavan72362.code"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1059746460228-l9o7he7q2lha0tnr01ap2hrem9tob2mc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pavan72362.code",
+            "certificate_hash": "948e44b820eb6186cc79d067389e8942a03c6465"
+          }
+        },
+        {
+          "client_id": "1059746460228-pqiojml8u2v7rsc8n1lc6s325fvdopkp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApcKt-avNCe65liCKGl9RwslsIwmvCeAs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1059746460228-51p16e2d08ajrtr65gatjr09qdtslv2q.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1059746460228-oi1o357m619di2k790mvp2irjupf2k3l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.pavan72362.code"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
