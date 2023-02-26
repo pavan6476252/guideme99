@@ -57,6 +57,7 @@ class _BlogUploadScreenState extends State<BlogUploadScreen> {
       final currentUser = FirebaseAuth.instance.currentUser;
       final userName = currentUser?.displayName ?? '';
       final userEmail = currentUser?.email ?? '';
+      final userId = currentUser?.uid??"";
       final userProfile = currentUser?.photoURL ?? '';
 
       // Upload the image to Firebase Storage and get the download URL
@@ -76,6 +77,7 @@ class _BlogUploadScreenState extends State<BlogUploadScreen> {
         'authorProfile': userProfile,
         'authorName': userName,
         'authorEmail': userEmail,
+        'authorId':userId,
         'date': currentDate,
         'image': downloadUrl,
         'hashTags': _hashTagsController.text.split(','),

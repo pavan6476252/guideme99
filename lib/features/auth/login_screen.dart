@@ -67,6 +67,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         icon: Icon(Icons.login),
                         label: Text('Sign in with Google'),
                       ),
+                      SizedBox(height: 50),
+                      ElevatedButton.icon(
+                        onPressed: ()=>Navigator.pushReplacementNamed(context, '/homeScreen'),
+                        icon: Icon(Icons.skateboarding_rounded),
+                        label: Text('Skip'),
+                      ),
                     ],
                   )
             // : Column(
