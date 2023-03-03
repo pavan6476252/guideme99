@@ -1,53 +1,73 @@
-import 'package:code/features/home/home_screen.dart';
-import 'package:code/features/upload/blog_upload_screen.dart';
-import 'package:code/providers/app_providers.dart';
-import 'package:code/providers/theme_provider.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:code/utils/splash_screen.dart';
+import 'package:code/pages/blogs/blogs_page.dart';
+import 'package:code/pages/ecet_docs/ecet_docs_page.dart';
+import 'package:code/pages/home/home_page.dart';
+import 'package:code/pages/viit_docs/vii_docs_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
-import 'features/auth/login_screen.dart';
-import 'features/home/blog_viewer.dart';
-import 'features/saved_blogs/saved_blogs_screen.dart';
-import 'firebase_options.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
+import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  
- 
+
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends ConsumerWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // final GoogleSignIn _googleSignIn = GoogleSignIn();
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    var darkMode = ref.watch(darkModeProvider);
+  Widget build(BuildContext context) {
     return MaterialApp(
-      theme:
-          ThemeData(useMaterial3: true, colorScheme: const ColorScheme.light()),
-      darkTheme:
-          ThemeData(useMaterial3: true, colorScheme: const ColorScheme.dark()),
-      themeMode: darkMode ? ThemeMode.dark : ThemeMode.light,
+      theme: ThemeData(useMaterial3: true,brightness: Brightness.dark),
+      // initialRoute: '/homepage',
+      onGenerateRoute: (RouteSettings settings) {
+        switch (settings.name) {
+          // case '/':
+          //   return MaterialPageRoute(builder: (context) => const SplashScreen());
+          // case '/':
+          //   return MaterialPageRoute(builder: (context) => HomePage());
+          // // case '/homepage':
+          // //   return MaterialPageRoute(builder: (context) => HomePage());
+          // case '/signupscreen':
+          //   return MaterialPageRoute(builder: (context) =>  SignUpPage());
+          // case '/loginpage':
+          //   return MaterialPageRoute(builder: (context) =>  LoginPage());
+          // case '/ecetcsepage':
+          //   return MaterialPageRoute(builder: (context) => const EcetCsePage());
 
-      initialRoute: '/',
-      // initialRoute: _googleSignIn.currentUser == null ? '/' : '/homeScreen',
-      routes: {
-        '/': (context) => const SplashScreen(),
-        '/loginScreen': (context) => LoginScreen(),
-        '/homeScreen': (context) => const HomeScreen(),
-        '/blogUploadScreen': (context) => const BlogUploadScreen(),
-        '/savedBlogsScreen': (context) => const SavedBlogsScreen(),
-        '/blogViewerScreen': (context) =>  BlogViewerScreen(),
+          // case '/settingspage':
+          //   return MaterialPageRoute(builder: (context) => const SettingPage());
+
+          case '/':
+            return MaterialPageRoute(
+              builder: (context) => const HomePage(),
+            );
+          case '/blogspage':
+            return MaterialPageRoute(
+              builder: (context) => const BlogsPage(),
+            );
+          case '/viitdocspage':
+            return MaterialPageRoute(
+              builder: (context) =>  ViitDocsPage(),
+            );
+          case '/ecetdocspage':
+            return MaterialPageRoute(
+              builder: (context) => const EcetDocsPage(),
+            );
+
+          default:
+            return MaterialPageRoute(
+                builder: (context) => const Scaffold(
+                      body: Center(
+                        child: Text("page not found!!"),
+                      ),
+                    ));
+        }
       },
     );
   }
