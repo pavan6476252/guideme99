@@ -104,6 +104,14 @@ class _SubjectsListPageState extends State<SubjectsListPage> {
     return Scaffold(
         appBar: AppBar(
           title: Text('${widget.title}  docs'),
+            actions: <Widget>[
+           isLoading ? IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                showSearch(context: context, delegate: DataSearch(subjectsList));
+              },
+            ) : SizedBox()
+          ],
         ),
         body: subjectsList != null
             ? Scrollbar(
@@ -136,5 +144,67 @@ class _SubjectsListPageState extends State<SubjectsListPage> {
                         icon: Icon(Icons.refresh_rounded),
                         onPressed: () => _refreshsubjectsList(),
                         label: Text("ReLoad"))));
+  }
+}
+
+
+class DataSearch extends SearchDelegate<String> {
+   Map<String, SubjectService>? data;
+
+  DataSearch(this.data);
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () {
+          query = '';
+        },
+      ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, "");
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return Center(
+      child: Text('No results found for "$query"'),
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    final suggestionList = query.isEmpty
+        ? data!.values.toList()
+        : data!.values
+            .where((item) =>
+                item.title.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+    return ListView.builder(
+      itemCount: suggestionList.length,
+      itemBuilder: (BuildContext context, int index) {
+        final item = suggestionList[index];
+        return Card(
+          child: ListTile(
+            title: Text(item.title),
+            subtitle: item.url != null ? Text(item.url??"",maxLines: 1 ,overflow: TextOverflow.ellipsis,) : null,
+            onTap: () {
+              launchUrl(Uri.parse(item.url??""));
+            },
+          ),
+        );
+      },
+    );
+  
   }
 }
