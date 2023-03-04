@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -13,10 +14,10 @@ class HomePage extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: SingleChildScrollView(
               child: Column(
-            children: const [
-              HeaderSection(),
-              HomePageContent(),
-              Text("Made with ♥ by Pavan kumar")
+            children:  [
+              const HeaderSection(),
+              const HomePageContent(),
+              GestureDetector( onTap: () => launchUrl(Uri.parse("https://pavan6476252.github.io/"),mode: LaunchMode.externalApplication), child: const Text("Made with ♥ by Pavan kumar"))
             ],
           )),
         ),
@@ -108,7 +109,7 @@ class HomePageContentCard extends StatelessWidget {
                         children: [
                            CircleAvatar(
                             backgroundColor: Theme.of(context).colorScheme.surface,
-                            child: Icon(Icons.person_4_outlined),
+                            child: const Icon(Icons.person_4_outlined),
                           ),
                           const SizedBox(width: 10),
                           Text(author)
@@ -120,7 +121,7 @@ class HomePageContentCard extends StatelessWidget {
                  CircleAvatar(
                             backgroundColor: Theme.of(context).colorScheme.onSecondary,
 
-                    child: Icon(Icons.rocket_launch))
+                    child: const Icon(Icons.rocket_launch))
               ],
             ),
           ),
@@ -163,7 +164,7 @@ class HeaderSection extends StatelessWidget {
               onPressed: () {},
               icon:  CircleAvatar(                            backgroundColor: Theme.of(context).colorScheme.onSecondary,
 
-                  child: Icon(Icons.search_rounded)))
+                  child: const Icon(Icons.search_rounded)))
         ],
       ),
     ));

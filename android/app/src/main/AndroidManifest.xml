@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.pavan72362.code">
    <application
-        android:label="code"
+        android:label="Guideme 99"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         

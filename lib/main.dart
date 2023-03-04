@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(useMaterial3: true,brightness: Brightness.dark),
+      debugShowCheckedModeBanner: false,
       // initialRoute: '/homepage',
       onGenerateRoute: (RouteSettings settings) {
         switch (settings.name) {
@@ -45,20 +46,20 @@ class MyApp extends StatelessWidget {
 
           case '/':
             return MaterialPageRoute(
-              builder: (context) => const HomePage(),
-            );
-          case '/blogspage':
-            return MaterialPageRoute(
-              builder: (context) => const BlogsPage(),
-            );
-          case '/viitdocspage':
-            return MaterialPageRoute(
               builder: (context) =>  ViitDocsPage(),
             );
-          case '/ecetdocspage':
-            return MaterialPageRoute(
-              builder: (context) => const EcetDocsPage(),
-            );
+          // case '/blogspage':
+          //   return MaterialPageRoute(
+          //     builder: (context) => const BlogsPage(),
+          //   );
+          // case '/viitdocspage':
+          //   return MaterialPageRoute(
+          //     builder: (context) =>  ViitDocsPage(),
+          //   );
+          // case '/ecetdocspage':
+          //   return MaterialPageRoute(
+          //     builder: (context) => const EcetDocsPage(),
+          //   );
 
           default:
             return MaterialPageRoute(
