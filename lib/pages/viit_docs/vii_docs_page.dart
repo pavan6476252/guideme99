@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 
 import 'package:code/services/subjects_api_service.dart';
@@ -12,7 +13,10 @@ class ViitDocsPage extends StatefulWidget {
 
 class _ViitDocsPageState extends State<ViitDocsPage> {
   final List<Map<String, String>> items = [
-    {"title": "1st Yeart", "url": "https://pavan72362.github.io/viit/1_st_year.json"},
+    {
+      "title": "1st Yeart",
+      "url": "https://pavan72362.github.io/viit/1_st_year.json"
+    },
     {
       "title": "Cse / it / Ai / Ai & Ds",
       "url": "https://pavan72362.github.io/viit/cs_it_aids_ai.json"
@@ -32,6 +36,13 @@ class _ViitDocsPageState extends State<ViitDocsPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Viit B.Tech Docs'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                AdaptiveTheme.of(context).toggleThemeMode();
+              },
+              icon: Icon(Icons.sunny))
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
